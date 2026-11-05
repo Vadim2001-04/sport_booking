@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Админ-панель</h1>
+{% include "admin/_tabs.html" %}
+<div class="card form-card wide">
+  <h2>{{ 'Новая площадка' if is_new else 'Редактирование: ' ~ venue.name }}</h2>
+  <form method="post">
+    <label>Название <input name="name" value="{{ venue.name }}" required></label>
+    <label>Вид спорта
+      <select name="sport_type">
+        {% for s in sport_types %}<option {% if s == venue.sport_type %}selected{% endif %}>{{ s }}</option>{% endfor %}
+      </select>
+    </label>
+    <label>Адрес <input name="address" value="{{ venue.address }}" required></label>
+    <label>Описание <textarea name="description" rows="3">{{ venue.description }}</textarea></label>
+    <div class="row">
+      <label>Цена, ₽/час <input type="number" name="price_per_hour" min="1" value="{{ venue.price_per_hour }}" required></label>
+      <label>Открытие (час) <input type="number" name="open_hour" min="0" max="23" value="{{ venue.open_hour }}" required></label>
+      <label>Закрытие (час) <input type="number" name="close_hour" min="1" max="24" value="{{ venue.close_hour }}" required></label>
+    </div>
+    <label class="checkbox"><input type="checkbox" name="is_active" {% if venue.is_active %}checked{% endif %}> Показывать в каталоге и принимать брони</label>
+    <button class="btn" type="submit">Сохранить</button>
+    <a class="btn btn-ghost" href="{{ url_for('admin_venues') }}">Отмена</a>
+  </form>
+</div>
+{% endblock %}

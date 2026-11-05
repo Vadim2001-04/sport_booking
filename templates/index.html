@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>Спортивные площадки</h1>
+
+<form class="filters" method="get">
+  <a class="chip {% if not selected_sport %}chip-active{% endif %}" href="{{ url_for('index') }}">Все</a>
+  {% for s in sport_types %}
+    <a class="chip {% if s == selected_sport %}chip-active{% endif %}" href="{{ url_for('index', sport=s) }}">{{ s }}</a>
+  {% endfor %}
+</form>
+
+{% if venues %}
+<div class="grid">
+  {% for v in venues %}
+  <a class="card venue-card" href="{{ url_for('venue_detail', venue_id=v.id) }}">
+    <span class="tag">{{ v.sport_type }}</span>
+    <h3>{{ v.name }}</h3>
+    <p class="muted">{{ v.address }}</p>
+    <p>{{ v.description }}</p>
+    <div class="card-footer">
+      <strong>{{ v.price_per_hour }} ₽/час</strong>
+      <span class="muted">{{ '%02d'|format(v.open_hour) }}:00–{{ '%02d'|format(v.close_hour) }}:00</span>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+{% else %}
+  <p class="muted">По выбранному фильтру площадок нет.</p>
+{% endif %}
+{% endblock %}
